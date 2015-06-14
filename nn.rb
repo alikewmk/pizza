@@ -37,12 +37,9 @@ class NeuralNetwork
     @w_2.map! { |arr| arr.map { |v| rand(-0.5..0.5) } }
 
     # It helps to store the current state of node activations
-    @activation_input = [1.0] * @inputNodes
-    @activation_hidden = [1.0] * @hiddenNodes
-    @activation_output = [1.0] * @outputNodes
-
-    @din = NeuralNetwork::create_matrix(@inputNodes, @hiddenNodes, 0.0)
-    @dout = NeuralNetwork::create_matrix(@hiddenNodes, @outputNodes, 0.0)
+    @activation_input = [0.0] * @inputNodes
+    @activation_hidden = [0.0] * @hiddenNodes
+    @activation_output = [0.0] * @outputNodes
 
     puts "w_1 = #{@inputNodes}x#{@hiddenNodes} Initialized to small random values"
     puts "w_2 = #{@hiddenNodes}x#{@outputNodes} Initialized to small random values"
@@ -104,8 +101,7 @@ class NeuralNetwork
     @hiddenNodes.times do |h|
       @outputNodes.times do |o|
         delt = delta_output[o] * @activation_hidden[h]
-        @w_2[h][o] = @w_2[h][o] + @learningRate * delt + @momentum * @dout[h][o]
-        @dout[h][o] = delt
+        @w_2[h][o] = @w_2[h][o] + @learningRate * delt
       end
     end
 
@@ -113,8 +109,7 @@ class NeuralNetwork
     @inputNodes.times do |i|
       @hiddenNodes.times do |h|
         delt = delta_hidden[h] * @activation_input[i]
-        @w_1[i][h] = @w_1[i][h] + @learningRate * delt + @momentum * @din[i][h]
-        @din[i][h] = delt
+        @w_1[i][h] = @w_1[i][h] + @learningRate * delt
       end
     end
 
