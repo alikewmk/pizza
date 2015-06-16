@@ -111,7 +111,7 @@ class ANN:
         for i in range(len_items):
             self.forward_prop(items[i])
             print(self.output_x[0])
-            result.append(1 if self.output_x[0] > 0.22 else 0)
+            result.append(1 if self.output_x[0] > 0.23 else 0)
 
         return result
 

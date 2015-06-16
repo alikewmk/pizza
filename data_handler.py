@@ -66,35 +66,35 @@ class DataHandler:
 
             # text need to be normalized?
             request_body = item['request_text_edit_aware'].split(" ")
-
             # request text length is a feature
             features_vector.append(len(request_body))
 
+            # reciprocity
             if re.search(r'pay it back|pay it forward|return the favor', item['request_text_edit_aware'], re.IGNORECASE):
                 return_favor = 1
             else:
                 return_favor = 0
             features_vector.append(return_favor)
 
+            # politeness
+            #if re.search(r'appreciate|hello|hey|great|awesome|please|could|would|thank', item['request_text_edit_aware'], re.IGNORECASE):
+            #    politeness = 1
+            #else:
+            #    politeness = 0
+            #features_vector.append(politeness)
+            #
+
+            # If provide evidence in request
+            if re.search(r'\.jpg|\.gif|\.png', item['request_text_edit_aware']):
+                has_image = 1
+            else:
+                has_image = 0
+            features_vector.append(has_image)
+
             # the interest text list of current user on reddit
             # consider using bag of words on this
             subreddits_at_request = item['requester_subreddits_at_request']
             features_vector.append(len(subreddits_at_request))
-
-            # request title, might need abandon repeated words like [request] etc
-            #request_title = item['request_title'].split(" ")
-            #if "return" in request_title or ("pay" in request_title and "back" in request_title):
-            #    request_title = 1
-            #else:
-            #    request_title = 0
-            #features_vector.append(request_title)
-
-            # if the requester promised to return the favor
-            #if ("return" in request_body) or ("pay" in request_body and "back" in request_body):
-            #    return_favor = 1
-            #else:
-            #    return_favor = 0
-            #features_vector.append(return_favor)
 
 ########### Extract Targets(For training data only)
 
@@ -150,7 +150,7 @@ if __name__ == "__main__":
 
     print(len(training_data))
     print(training_data[0:10])
-    ann = ANN(8,10,1)
+    ann = ANN(9,10,1)
     for i in range(20):
         print(i+1)
         ann.train(training_data, 5000)
