@@ -62,7 +62,7 @@ class ANN:
         # error on output layer
         output_del = [0]*self.output_num
         for i in range(self.output_num):
-            output_del[i] = y[i] - self.output_x[i]
+            output_del[i] = -(y[i] - self.output_x[i])
 
         # error on hidden layer
         # notice that the order of iterating layer is reversed
@@ -76,12 +76,12 @@ class ANN:
         # update hidden weight
         for i in range(self.hidden_num):
             for j in range(self.output_num):
-                self.hidden_weights[i][j] += alpha*output_del[j]*self.hidden_x[i]
+                self.hidden_weights[i][j] -= alpha*output_del[j]*self.hidden_x[i]
 
         # update input weight
         for i in range(self.input_num):
             for j in range(self.hidden_num):
-                self.input_weights[i][j] += alpha*hidden_del[j]*self.input_x[i]
+                self.input_weights[i][j] -= alpha*hidden_del[j]*self.input_x[i]
 
     # online learning
     def train(self, items, iter_num):
@@ -111,7 +111,7 @@ class ANN:
         for i in range(len_items):
             self.forward_prop(items[i])
             print(self.output_x[0])
-            result.append(1 if self.output_x[0] > 0.25 else 0)
+            result.append(1 if self.output_x[0] > 0.22 else 0)
 
         return result
 
