@@ -1,6 +1,7 @@
 from gzip import GzipFile
 import json
 import datetime
+import re
 from ann import ANN
 
 TRAIN_FILENAME = "../data/train.json"
@@ -45,8 +46,8 @@ class DataHandler:
             features_vector.append(user_account_age)
 
             # preprocess comment_num
-            #comment_num = float(item['requester_number_of_comments_in_raop_at_request'])
-            #features_vector.append(comment_num)
+            comment_num = float(item['requester_number_of_comments_in_raop_at_request'])
+            features_vector.append(comment_num)
 
             # preprocess upvote_minus_downvotes
             upvote_minus_downvotes = float(item['requester_upvotes_minus_downvotes_at_request'])
@@ -56,14 +57,6 @@ class DataHandler:
             upvotes_plus_downvotes = float(item['requester_upvotes_plus_downvotes_at_request'])
             features_vector.append(upvotes_plus_downvotes)
 
-            ## Then handle temporary factor features
-            # time_of_request, only care about hour
-            # Another hypothesis: check if it is in the morning or at noon, return 0, in the afternoon, return 1
-            #time_of_request = int(item['unix_timestamp_of_request'])
-            #day = int(datetime.datetime.fromtimestamp(time_of_request).strftime("%d"))
-            #time_of_request = (1 if day < 14 else 0)
-            #features_vector.append(time_of_request)
-
             # The time of the first post requester made
             first_post_time = float(item['requester_days_since_first_post_on_raop_at_request'])
             features_vector.append(first_post_time)
@@ -71,31 +64,37 @@ class DataHandler:
             ## Then handle text feature
             ## Don't make the vector too big, maybe :)
 
-            # the interest text list of current user on reddit
-            # consider using bag of words on this
-            #subreddits_at_request = item['requester_subreddits_at_request']
-            #features_vector.append(len(subreddits_at_request))
-
-            # request title, might need abandon repeated words like [request] etc
-            request_title = item['request_title'].split(" ")
-            if "return" in request_title or ("pay" in request_title and "back" in request_title):
-                request_title = 1
-            else:
-                request_title = 0
-            features_vector.append(request_title)
-
             # text need to be normalized?
             request_body = item['request_text_edit_aware'].split(" ")
 
             # request text length is a feature
             features_vector.append(len(request_body))
 
-            # if the requester promised to return the favor
-            if ("return" in request_body) or ("pay" in request_body and "back" in request_body):
+            if re.search(r'pay it back|pay it forward|return the favor', item['request_text_edit_aware'], re.IGNORECASE):
                 return_favor = 1
             else:
                 return_favor = 0
             features_vector.append(return_favor)
+
+            # the interest text list of current user on reddit
+            # consider using bag of words on this
+            subreddits_at_request = item['requester_subreddits_at_request']
+            features_vector.append(len(subreddits_at_request))
+
+            # request title, might need abandon repeated words like [request] etc
+            #request_title = item['request_title'].split(" ")
+            #if "return" in request_title or ("pay" in request_title and "back" in request_title):
+            #    request_title = 1
+            #else:
+            #    request_title = 0
+            #features_vector.append(request_title)
+
+            # if the requester promised to return the favor
+            #if ("return" in request_body) or ("pay" in request_body and "back" in request_body):
+            #    return_favor = 1
+            #else:
+            #    return_favor = 0
+            #features_vector.append(return_favor)
 
 ########### Extract Targets(For training data only)
 
@@ -151,7 +150,7 @@ if __name__ == "__main__":
 
     print(len(training_data))
     print(training_data[0:10])
-    ann = ANN(7,10,1)
+    ann = ANN(8,10,1)
     for i in range(20):
         print(i+1)
         ann.train(training_data, 5000)
