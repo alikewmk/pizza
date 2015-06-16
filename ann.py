@@ -1,10 +1,6 @@
 import numpy as np
 import random
 
-
-## TEST DATA
-DATA = [ [[1,1,1],[1]], [[1,1,1],[1]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[1,1,1],[1]], [[1,1,1],[1]]]
-
 # Don't forget about bias
 class ANN:
 
@@ -109,8 +105,24 @@ class ANN:
 
         print("Accuracy: " + str(right_count/len_items))
 
+    def test_without_true_label(self, items):
+        len_items = len(items)
+        result = []
+        for i in range(len_items):
+            self.forward_prop(items[i])
+            print(self.output_x[0])
+            result.append(1 if self.output_x[0] > 0.25 else 0)
+
+        return result
 
 ### TEST
-ann = ANN(3,2,1)
-ann.train(DATA, 1000)
-ann.test(DATA)
+if __name__ == "__main__":
+
+    ## TEST DATA
+    data = [ [[1,1,1],[1]], [[1,1,1],[1]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[1,1,1],[1]], [[1,1,1],[1]]]
+    data_without_label = [[1,1,1], [1,1,1], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [1,1,1], [1,1,1]]
+
+    ann = ANN(3,2,1)
+    ann.train(data, 1000)
+    ann.test(data)
+    print(ann.test_without_true_label(data_without_label))
