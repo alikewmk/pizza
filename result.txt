@@ -1,12 +1,12 @@
 request_id,requester_received_pizza
-t3_i8iy4,1
+t3_i8iy4,0
 t3_1mfqi0,1
 t3_lclka,0
 t3_1jdgdj,0
 t3_t2qt4,1
 t3_pvojb,1
 t3_142n4c,0
-t3_17rja6,1
+t3_17rja6,0
 t3_1lg6u2,0
 t3_1b0mtx,1
 t3_mmivq,1
@@ -39,7 +39,7 @@ t3_tllxh,1
 t3_ibvic,0
 t3_153cst,1
 t3_115vox,1
-t3_n318c,1
+t3_n318c,0
 t3_ojy6r,0
 t3_wziql,0
 t3_jiwx8,0
@@ -78,7 +78,7 @@ t3_1737ki,1
 t3_pfl37,1
 t3_qg1wv,1
 t3_wcupv,0
-t3_14gsx5,1
+t3_14gsx5,0
 t3_xzsu3,0
 t3_1lnsb4,1
 t3_iympu,0
@@ -123,7 +123,7 @@ t3_sz4rm,0
 t3_micek,1
 t3_nbkbt,0
 t3_13jofn,0
-t3_1fwjjw,0
+t3_1fwjjw,1
 t3_q2spw,0
 t3_v8f7b,1
 t3_1cnqfg,1
@@ -200,7 +200,7 @@ t3_xd60b,0
 t3_htzo7,1
 t3_1hl0jw,0
 t3_19lq75,0
-t3_1bp2u8,1
+t3_1bp2u8,0
 t3_jdxtx,1
 t3_j68ur,1
 t3_10fo7v,0
@@ -255,9 +255,9 @@ t3_iqw0f,1
 t3_1fbfeg,1
 t3_j7us6,0
 t3_iwany,0
-t3_mdhq5,1
+t3_mdhq5,0
 t3_wag1s,0
-t3_1kvwpq,0
+t3_1kvwpq,1
 t3_plp25,0
 t3_k3qyc,0
 t3_12txtd,0
@@ -322,7 +322,7 @@ t3_jwam4,0
 t3_143pb1,1
 t3_ixmw3,1
 t3_roye7,1
-t3_1l1b96,1
+t3_1l1b96,0
 t3_1lfxmx,0
 t3_sm0fi,1
 t3_x6xfz,0
@@ -359,9 +359,9 @@ t3_m47yc,1
 t3_1mg7m1,0
 t3_1mdya5,1
 t3_19ctqj,1
-t3_1mim72,1
+t3_1mim72,0
 t3_iymko,1
-t3_opkmm,0
+t3_opkmm,1
 t3_y466n,1
 t3_jx9tr,0
 t3_10zoec,1
@@ -374,7 +374,7 @@ t3_y8w7b,1
 t3_kxjsp,0
 t3_1ivwvt,0
 t3_x768a,0
-t3_1iv28l,1
+t3_1iv28l,0
 t3_1l27b3,1
 t3_q1xxo,0
 t3_jb6na,0
@@ -387,7 +387,7 @@ t3_lstm9,0
 t3_1j5z7e,0
 t3_1574sv,1
 t3_wkdxa,1
-t3_pl5aj,0
+t3_pl5aj,1
 t3_qap6u,1
 t3_1gvnj8,0
 t3_js9gy,1
@@ -395,7 +395,7 @@ t3_is8cd,0
 t3_lbl8w,0
 t3_uozbx,0
 t3_1lxntp,0
-t3_11n72r,1
+t3_11n72r,0
 t3_1iez8q,0
 t3_ozu7k,0
 t3_owy0m,0
@@ -412,7 +412,7 @@ t3_k1gsx,1
 t3_1dmups,0
 t3_x959y,1
 t3_nnbds,1
-t3_13trxv,1
+t3_13trxv,0
 t3_1awfml,0
 t3_lyy5x,1
 t3_1iwegx,0
@@ -617,10 +617,10 @@ t3_utp3h,0
 t3_10tv7s,0
 t3_1a40n4,0
 t3_kj8a0,0
-t3_1mgrri,1
+t3_1mgrri,0
 t3_1nd11h,1
 t3_1ldhfb,0
-t3_10mo95,1
+t3_10mo95,0
 t3_sx32l,1
 t3_pw2mi,1
 t3_o7co1,0
@@ -632,13 +632,13 @@ t3_rp169,0
 t3_zatki,0
 t3_iknip,0
 t3_uhoi3,0
-t3_uz6m5,1
+t3_uz6m5,0
 t3_127wms,1
 t3_16bong,0
 t3_uz1hn,1
 t3_keq0w,0
 t3_y3hef,0
-t3_iaoch,0
+t3_iaoch,1
 t3_rf6ne,0
 t3_1cjpyc,1
 t3_t1rba,0
@@ -692,7 +692,7 @@ t3_15zae8,0
 t3_118p7t,1
 t3_p1s5g,0
 t3_slvkc,1
-t3_1n0mel,1
+t3_1n0mel,0
 t3_z9a9f,0
 t3_vzxe5,0
 t3_103oiv,0
@@ -704,7 +704,7 @@ t3_ihdep,0
 t3_iui32,0
 t3_pwu9g,0
 t3_1jd4uk,0
-t3_iq6md,0
+t3_iq6md,1
 t3_x7u2w,1
 t3_1j6vvd,0
 t3_103ub7,0
@@ -758,7 +758,7 @@ t3_1bnjaf,0
 t3_mn557,0
 t3_1iuxw6,1
 t3_1eipbs,1
-t3_16gm64,1
+t3_16gm64,0
 t3_z10a2,0
 t3_jq2qd,0
 t3_yl0mo,1
@@ -786,7 +786,7 @@ t3_iqyh1,1
 t3_vbvas,1
 t3_i77kq,1
 t3_kn4tz,0
-t3_iql59,0
+t3_iql59,1
 t3_1jtmxq,1
 t3_1g4n79,0
 t3_18a5ku,0
@@ -821,7 +821,7 @@ t3_lqc45,0
 t3_1nbk5w,0
 t3_1dqyg1,0
 t3_1lxc6a,1
-t3_16up9c,1
+t3_16up9c,0
 t3_ki92d,0
 t3_xun5w,0
 t3_jp37k,0
@@ -957,7 +957,7 @@ t3_qywp7,0
 t3_1mjo0g,1
 t3_i2gwx,1
 t3_x7px3,0
-t3_17crrn,1
+t3_17crrn,0
 t3_15muo0,0
 t3_iatwz,1
 t3_j55ss,1
@@ -987,7 +987,7 @@ t3_14tp3u,0
 t3_pgnfb,0
 t3_jf2ir,0
 t3_k4gza,0
-t3_10wg2c,1
+t3_10wg2c,0
 t3_if7p7,0
 t3_m45jf,0
 t3_uf051,1
@@ -1010,7 +1010,7 @@ t3_1b5a4p,0
 t3_iamq6,1
 t3_o6z29,0
 t3_jydqo,0
-t3_p3ftt,1
+t3_p3ftt,0
 t3_pupzc,1
 t3_tn97v,0
 t3_vqsnl,0
@@ -1038,7 +1038,7 @@ t3_11b1ti,0
 t3_1aoz8s,0
 t3_1cr1zd,0
 t3_yvma1,0
-t3_ifzvz,1
+t3_ifzvz,0
 t3_sp26r,1
 t3_w5b9g,0
 t3_ql4hw,0
@@ -1242,7 +1242,7 @@ t3_opj7h,0
 t3_12jio7,0
 t3_1loyn7,1
 t3_12c6hf,1
-t3_pzish,0
+t3_pzish,1
 t3_1h05vp,0
 t3_110efm,0
 t3_xa98e,1
@@ -1264,7 +1264,7 @@ t3_1mhbok,1
 t3_150x3u,0
 t3_rdsa5,0
 t3_1k175h,1
-t3_xu8em,1
+t3_xu8em,0
 t3_w7fjy,0
 t3_xnrho,0
 t3_1n6wjw,0
@@ -1274,7 +1274,7 @@ t3_jmnl8,0
 t3_1kkv09,0
 t3_ngvgh,0
 t3_jx94c,1
-t3_xwxmj,0
+t3_xwxmj,1
 t3_iwfd1,0
 t3_10hpsk,0
 t3_hvwav,0
@@ -1321,13 +1321,13 @@ t3_uj7th,0
 t3_xsnoi,0
 t3_jyi06,1
 t3_yxnzv,0
-t3_l4640,1
+t3_l4640,0
 t3_1dnss4,0
 t3_1359u2,0
 t3_s4r05,0
 t3_j16ec,0
 t3_zpi3v,0
-t3_pyewj,0
+t3_pyewj,1
 t3_ychfj,0
 t3_l4pgj,1
 t3_1llkaa,1
@@ -1402,7 +1402,7 @@ t3_v0ki0,0
 t3_jq47k,0
 t3_1fqoyo,0
 t3_vbb3v,0
-t3_1k62l3,1
+t3_1k62l3,0
 t3_12p4pv,0
 t3_i37e6,0
 t3_if7vp,1
@@ -1445,7 +1445,7 @@ t3_w8rkv,0
 t3_12x5q1,0
 t3_jshkp,0
 t3_1o9hi0,1
-t3_u64m1,0
+t3_u64m1,1
 t3_1cylzs,0
 t3_icou8,0
 t3_jvh8u,0
@@ -1497,7 +1497,7 @@ t3_kbmyh,1
 t3_170pqr,0
 t3_sqwpp,1
 t3_1553el,0
-t3_ikbu8,0
+t3_ikbu8,1
 t3_y6aab,0
 t3_1fxma9,0
 t3_18gj1h,0
@@ -1533,7 +1533,7 @@ t3_1esd91,1
 t3_vai9m,0
 t3_ne3jr,0
 t3_1nm9os,0
-t3_ledhr,0
+t3_ledhr,1
 t3_pw02q,0
 t3_irgbj,0
 t3_xd9hv,1
@@ -1546,7 +1546,7 @@ t3_ifrfv,1
 t3_x8mp3,0
 t3_x2qzw,0
 t3_13u1al,0
-t3_xnwf2,0
+t3_xnwf2,1
 t3_xf1p9,0
 t3_jjz0j,1
 t3_k08dr,1

@@ -1,6 +1,5 @@
 from gzip import GzipFile
 import json
-import datetime
 import re
 from ann import ANN
 
@@ -11,11 +10,11 @@ TEST_FILENAME  = "../data/test.json"
 #                    comment_num,
 #                    upvote_minus_downvotes,
 #                    upvotes_plus_downvotes,
-#                    time_of_request
-#                    first_post_time
-#                    subreddits_at_request # This is a tricky one, think about it later
-#                    request_title
-#                    request_body
+#                    first_post_time,
+#                    subreddits_at_request,
+#                    request_body_length,
+#                    reciprocity
+#                    has_evidence
 #                    ]
 #
 # target_vector = [received_pizza (1 => yes, 0 => no)]
@@ -147,10 +146,8 @@ if __name__ == "__main__":
 
     handler = DataHandler()
     training_data = handler.generate_data(TRAIN_FILENAME)
-
-    print(len(training_data))
-    print(training_data[0:10])
     ann = ANN(9,10,1)
+
     for i in range(20):
         print(i+1)
         ann.train(training_data, 5000)

@@ -1,7 +1,6 @@
 import numpy as np
 import random
 
-# Don't forget about bias
 class ANN:
 
     def __init__(self, input_num, hidden_num, output_num):
@@ -97,9 +96,6 @@ class ANN:
         for i in range(len_items):
             self.forward_prop(items[i][0])
             expected_val = [1] if self.output_x[0] > 0.5 else [0]
-            #print(self.output_x)
-            #print(items[i][1])
-            #print(expected_val)
             if expected_val == items[i][1]:
                 right_count += 1
 
