@@ -69,7 +69,7 @@ class DataHandler:
             features_vector.append(len(request_body))
 
             # reciprocity
-            if re.search(r'pay it back|pay it forward|return the favor', item['request_text_edit_aware'], re.IGNORECASE):
+            if re.search(r'pay it back|pay it forward|return the favor|give back', item['request_text_edit_aware'], re.IGNORECASE):
                 return_favor = 1
             else:
                 return_favor = 0
@@ -95,7 +95,7 @@ class DataHandler:
             subreddits_at_request = item['requester_subreddits_at_request']
             features_vector.append(len(subreddits_at_request))
 
-########### Extract Targets(For training data only)
+########### Extract Target Labels(For training data only)
 
             if type == "train":
                 received_pizza = 1 if item['requester_received_pizza'] == True else 0
@@ -103,6 +103,18 @@ class DataHandler:
                 return [features_vector, target_vector]
             else:
                 return [features_vector]
+
+    # 1.count of words with sentiment information in message
+    # 2.generate bag of words vec for sentiment information
+    # see which one is better
+    def words_count(self, dict, words):
+
+        dict = ["appreciate", "hello", "hey", "please", "could", "would", "thank", "thanks"]
+        pattern = re.comiple(join(dict, "|"))
+        for item in self.read(filename):
+            request_body = item['request_text_edit_aware'].split(" ")
+            request_title = item['']
+        return len(re.findall(r'pay it back|pay it forward|return',"return return return"))
 
     # batch generate data
     def generate_data(self, filename, type="train"):
@@ -114,7 +126,7 @@ class DataHandler:
             #print(data_vec)
             data.append(data_vec)
 
-        feat_vecs = self.normalize([row[0] for row in data])
+        feat_vecs = self.normalize_by_max([row[0] for row in data])
 
         if type == "train":
             for i in range(len(data)):
@@ -124,7 +136,7 @@ class DataHandler:
 
         return data
 
-    def normalize(self, data):
+    def normalize_by_max(self, data):
         for i in range(len(data[0])):
             column = [vec[i] for vec in data]
             max_val = max(column)
@@ -133,6 +145,18 @@ class DataHandler:
 
             for j in range(len(data)):
                 data[j][i] = data[j][i]/max_val
+
+        return data
+
+    # not as good as normalized by max
+    def normalize_by_mean(self, data):
+        for i in range(len(data[0])):
+            column = [vec[i] for vec in data]
+            mean = st.mean(column)
+            sd   = st.variance(column)**0.5
+
+            for j in range(len(data)):
+                data[j][i] = (data[j][i] - mean)/sd
 
         return data
 
@@ -145,15 +169,19 @@ class DataHandler:
 if __name__ == "__main__":
 
     handler = DataHandler()
-    training_data = handler.generate_data(TRAIN_FILENAME)
-    ann = ANN(9,10,1)
+    data = handler.generate_data(TRAIN_FILENAME)
+
+    ann = ANN(9,10,10,10,1)
 
     for i in range(20):
         print(i+1)
-        ann.train(training_data, 5000)
+        ann.train(data, 5000)
 
     testing_data = handler.generate_data(TEST_FILENAME, 'test')
-    result = ann.test_without_true_label(testing_data)
+    result = ann.test_without_true_label(testing_data, 0.23)
     handler.write_to_result(TEST_FILENAME, result)
 
+    training_data = data[:3500]
 
+    testing_data = data[3500:]
+    result = ann.test(testing_data, 0.23)

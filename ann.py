@@ -3,21 +3,25 @@ import random
 
 class ANN:
 
-    def __init__(self, input_num, hidden_num, output_num):
+    def __init__(self, *nums):
 
-        # add bias node to input
-        self.input_num  = input_num + 1
-        self.hidden_num = hidden_num
-        self.output_num = output_num
+        # initial node num for each layer
+        # remember to add bias node to input
+        self.layers = len(nums)
+        self.nums = list(nums)
+        self.nums[0] += 1
 
         # init weights of input and hidden layer with random small values
-        self.input_weights  = self.init_matrix(self.input_num, self.hidden_num)
-        self.hidden_weights = self.init_matrix(self.hidden_num, self.output_num)
+        self.weights = []
+        for i in range(self.layers-1):
+            self.weights.append(self.init_matrix(self.nums[i], self.nums[i+1]))
 
-        # init x values
-        self.input_x  = [1]*input_num + [1]
-        self.hidden_x = [1]*self.hidden_num
-        self.output_x = [1]*self.output_num
+        # init x values, delta values
+        self.x_vals = []
+        self.deltas = []
+        for i in range(self.layers):
+            self.x_vals.append([0]*self.nums[i])
+            self.deltas.append([0]*self.nums[i])
 
     # Notice that weight have to be initialized with a small number
     # positive or negative, the setting of weight affect
@@ -39,48 +43,41 @@ class ANN:
 
     def forward_prop(self, data_vec):
         # initialize input
-        self.input_x[:-1] = data_vec
+        self.x_vals[0][:-1] = data_vec
         # set bias to one
-        self.input_x[-1] = 1
+        self.x_vals[0][-1]  = 1
 
         # update each column of weight array
         # notice the order of iterating layers
-        for j in range(self.hidden_num):
-            z = 0
-            for i in range(self.input_num):
-                z += self.input_x[i]*self.input_weights[i][j]
-            self.hidden_x[j] = self.g_(z)
-
-        for j in range(self.output_num):
-            z = 0
-            for i in range(self.hidden_num):
-                z += self.hidden_x[i]*self.hidden_weights[i][j]
-            self.output_x[j] = self.g_(z)
+        for i in range(1, self.layers):
+            # post layer
+            for j in range(self.nums[i]):
+                z = 0
+                # prior layer
+                for k in range(self.nums[i-1]):
+                    z += self.x_vals[i-1][k]*self.weights[i-1][k][j]
+                self.x_vals[i][j] = self.g_(z)
 
     def back_prop(self, y, alpha=0.1):
         # error on output layer
-        output_del = [0]*self.output_num
-        for i in range(self.output_num):
-            output_del[i] = -(y[i] - self.output_x[i])
+        for i in range(self.nums[-1]):
+            self.deltas[-1][i] = -(y[i] - self.x_vals[-1][i])
 
-        # error on hidden layer
-        # notice that the order of iterating layer is reversed
-        hidden_del = [0]*self.hidden_num
-        for i in range(self.hidden_num):
-            error = 0
-            for j in range(self.output_num):
-                error += output_del[j]*self.hidden_weights[i][j]
-            hidden_del[i] = error * self.dg_(self.hidden_x[i])
+        # error on each hidden layer
+        for i in reversed(range(1, self.layers-1)):
+            # prior layer
+            for j in range(self.nums[i]):
+                error = 0
+                # post layer
+                for k in range(self.nums[i+1]):
+                    error += self.deltas[i+1][k]*self.weights[i][j][k]
+                self.deltas[i][j] = error*self.dg_(self.x_vals[i][j])
 
-        # update hidden weight
-        for i in range(self.hidden_num):
-            for j in range(self.output_num):
-                self.hidden_weights[i][j] -= alpha*output_del[j]*self.hidden_x[i]
-
-        # update input weight
-        for i in range(self.input_num):
-            for j in range(self.hidden_num):
-                self.input_weights[i][j] -= alpha*hidden_del[j]*self.input_x[i]
+        # update weights
+        for i in reversed(range(self.layers-1)):
+            for j in range(self.nums[i]):
+                for k in range(self.nums[i+1]):
+                    self.weights[i][j][k] -= alpha*self.deltas[i+1][k]*self.x_vals[i][j]
 
     # online learning
     def train(self, items, iter_num):
@@ -90,24 +87,26 @@ class ANN:
             self.forward_prop(item[0])
             self.back_prop(item[1])
 
-    def test(self, items):
+    # prediction with labeled data, in order to calculate accuracy
+    def test(self, items, threshold=0.5):
         len_items = len(items)
         right_count = 0
         for i in range(len_items):
             self.forward_prop(items[i][0])
-            expected_val = [1] if self.output_x[0] > 0.5 else [0]
+            expected_val = [1] if self.x_vals[-1][0] > 0.5 else [0]
             if expected_val == items[i][1]:
                 right_count += 1
 
         print("Accuracy: " + str(right_count/len_items))
 
-    def test_without_true_label(self, items):
+    # prediction with unlabeled test data
+    def test_without_true_label(self, items, threshold=0.5):
         len_items = len(items)
         result = []
         for i in range(len_items):
             self.forward_prop(items[i])
-            print(self.output_x[0])
-            result.append(1 if self.output_x[0] > 0.23 else 0)
+            print(self.x_vals[-1][0])
+            result.append(1 if self.x_vals[-1][0] > threshold else 0)
 
         return result
 
@@ -118,7 +117,7 @@ if __name__ == "__main__":
     data = [ [[1,1,1],[1]], [[1,1,1],[1]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[1,1,1],[1]], [[1,1,1],[1]]]
     data_without_label = [[1,1,1], [1,1,1], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [1,1,1], [1,1,1]]
 
-    ann = ANN(3,2,1)
+    ann = ANN(3,9,9,1)
     ann.train(data, 1000)
     ann.test(data)
     print(ann.test_without_true_label(data_without_label))
