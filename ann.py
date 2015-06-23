@@ -91,22 +91,44 @@ class ANN:
     def test(self, items, threshold=0.5):
         len_items = len(items)
         right_count = 0
+        true_vals = []
         for i in range(len_items):
             self.forward_prop(items[i][0])
-            expected_val = [1] if self.x_vals[-1][0] > 0.5 else [0]
+            #print(self.x_vals[-1][0])
+            true_vals.append(self.x_vals[-1][0])
+
+
+        print(np.mean(true_vals))
+        print(np.median(true_vals))
+
+        threshold = np.mean(true_vals) + 0.02
+
+        for i in range(len_items):
+            expected_val = [1] if true_vals[i] > threshold else [0]
             if expected_val == items[i][1]:
                 right_count += 1
 
-        print("Accuracy: " + str(right_count/len_items))
+
+        print("Accuracy: " + str(right_count/len_items) + "\n")
+
+        return right_count/len_items
 
     # prediction with unlabeled test data
     def test_without_true_label(self, items, threshold=0.5):
         len_items = len(items)
         result = []
+        true_vals = []
         for i in range(len_items):
             self.forward_prop(items[i])
-            print(self.x_vals[-1][0])
-            result.append(1 if self.x_vals[-1][0] > threshold else 0)
+            true_vals.append(self.x_vals[-1][0])
+
+
+        print(np.mean(true_vals))
+        print(np.median(true_vals))
+        threshold = np.median(true_vals) + 0.01
+
+        for i in range(len_items):
+            result.append(1 if true_vals[i] > threshold else 0)
 
         return result
 
@@ -117,7 +139,9 @@ if __name__ == "__main__":
     data = [ [[1,1,1],[1]], [[1,1,1],[1]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[0,0,0],[0]], [[1,1,1],[1]], [[1,1,1],[1]]]
     data_without_label = [[1,1,1], [1,1,1], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [1,1,1], [1,1,1]]
 
-    ann = ANN(3,9,9,1)
+    ann = ANN(3,5,9,1)
     ann.train(data, 1000)
+    print("With Labels:\n")
     ann.test(data)
+    print("With No Labels:\n")
     print(ann.test_without_true_label(data_without_label))

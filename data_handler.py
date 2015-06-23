@@ -1,28 +1,29 @@
 from gzip import GzipFile
 import json
 import re
+import statistics as st
 from ann import ANN
 
-TRAIN_FILENAME = "../data/train.json"
-TEST_FILENAME  = "../data/test.json"
+TRAIN_FILENAME = "data/train.json"
+TEST_FILENAME  = "data/test.json"
+POLITE_DICT = ["appreciate", "hello", "hey", "please", "could", "would", "thank"]
+POLITE_PATTERN = re.compile("|".join(POLITE_DICT))
+RECIPROCITY_PATTERN = re.compile(r'pay it back|pay it forward|return the favor|give back')
+IMAGE_PATTERN = re.compile(r'\.jpg|\.gif|\.png')
 
-# features_vector = [user_account_age,
-#                    comment_num,
-#                    upvote_minus_downvotes,
-#                    upvotes_plus_downvotes,
-#                    first_post_time,
-#                    subreddits_at_request,
-#                    request_body_length,
-#                    reciprocity
-#                    has_evidence
-#                    ]
-#
+# final_features_vector = [user_account_age,
+#                          comment_num,
+#                          upvote_minus_downvotes,
+#                          upvotes_plus_downvotes,
+#                          first_post_time,
+#                          subreddits_at_request,
+#                          request_body_length,
+#                          reciprocity
+#                          has_evidence
+#                          ]
 # target_vector = [received_pizza (1 => yes, 0 => no)]
 
 class DataHandler:
-
-    #def __init__(self):
-    #    self.filename = filename
 
     def read(self, filename):
         with open(filename) as json_file:
@@ -33,7 +34,6 @@ class DataHandler:
     def extract_feature(self, item, type):
             features_vector = []
             target_vector   = []
-
 
 ########### Extract Features
 
@@ -61,37 +61,30 @@ class DataHandler:
             features_vector.append(first_post_time)
 
             ## Then handle text feature
-            ## Don't make the vector too big, maybe :)
 
-            # text need to be normalized?
             request_body = item['request_text_edit_aware'].split(" ")
+
             # request text length is a feature
             features_vector.append(len(request_body))
 
             # reciprocity
-            if re.search(r'pay it back|pay it forward|return the favor|give back', item['request_text_edit_aware'], re.IGNORECASE):
+            if RECIPROCITY_PATTERN.search(item['request_text_edit_aware'], re.IGNORECASE):
                 return_favor = 1
             else:
                 return_favor = 0
             features_vector.append(return_favor)
 
-            # politeness
-            #if re.search(r'appreciate|hello|hey|great|awesome|please|could|would|thank', item['request_text_edit_aware'], re.IGNORECASE):
-            #    politeness = 1
-            #else:
-            #    politeness = 0
-            #features_vector.append(politeness)
-            #
+            # politeness, not working, deleted
+            #features_vector.append(len(POLITE_PATTERN.findall(item['request_text_edit_aware'])))
 
             # If provide evidence in request
-            if re.search(r'\.jpg|\.gif|\.png', item['request_text_edit_aware']):
+            if IMAGE_PATTERN.search(item['request_text_edit_aware']):
                 has_image = 1
             else:
                 has_image = 0
             features_vector.append(has_image)
 
             # the interest text list of current user on reddit
-            # consider using bag of words on this
             subreddits_at_request = item['requester_subreddits_at_request']
             features_vector.append(len(subreddits_at_request))
 
@@ -104,18 +97,6 @@ class DataHandler:
             else:
                 return [features_vector]
 
-    # 1.count of words with sentiment information in message
-    # 2.generate bag of words vec for sentiment information
-    # see which one is better
-    def words_count(self, dict, words):
-
-        dict = ["appreciate", "hello", "hey", "please", "could", "would", "thank", "thanks"]
-        pattern = re.comiple(join(dict, "|"))
-        for item in self.read(filename):
-            request_body = item['request_text_edit_aware'].split(" ")
-            request_title = item['']
-        return len(re.findall(r'pay it back|pay it forward|return',"return return return"))
-
     # batch generate data
     def generate_data(self, filename, type="train"):
 
@@ -123,7 +104,6 @@ class DataHandler:
 
         for item in self.read(filename):
             data_vec = self.extract_feature(item, type)
-            #print(data_vec)
             data.append(data_vec)
 
         feat_vecs = self.normalize_by_max([row[0] for row in data])
@@ -141,8 +121,7 @@ class DataHandler:
             column = [vec[i] for vec in data]
             max_val = max(column)
 
-            if max_val == 0: continue
-
+            if max_val <= 1: continue
             for j in range(len(data)):
                 data[j][i] = data[j][i]/max_val
 
@@ -155,6 +134,9 @@ class DataHandler:
             mean = st.mean(column)
             sd   = st.variance(column)**0.5
 
+            max_val = max(column)
+            if max_val <= 1: continue
+
             for j in range(len(data)):
                 data[j][i] = (data[j][i] - mean)/sd
 
@@ -166,22 +148,18 @@ class DataHandler:
             for idx, item in enumerate(self.read(filename)):
                 result_file.write(item['request_id']+","+str(result[idx])+"\n")
 
+# TEST
 if __name__ == "__main__":
 
     handler = DataHandler()
     data = handler.generate_data(TRAIN_FILENAME)
 
-    ann = ANN(9,10,10,10,1)
+    ann = ANN(9,10,1)
 
-    for i in range(20):
+    for i in range(40):
         print(i+1)
         ann.train(data, 5000)
 
     testing_data = handler.generate_data(TEST_FILENAME, 'test')
-    result = ann.test_without_true_label(testing_data, 0.23)
+    result = ann.test_without_true_label(testing_data)
     handler.write_to_result(TEST_FILENAME, result)
-
-    training_data = data[:3500]
-
-    testing_data = data[3500:]
-    result = ann.test(testing_data, 0.23)
